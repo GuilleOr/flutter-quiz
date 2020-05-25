@@ -12,24 +12,48 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var _questionIndex = 0;
-
   final _questions = const [
     {
       'question': 'what\' your favorite color?',
-      'answer': ['red', 'green', 'black', 'blue'],
+      'answer': [
+        {'text': 'red', 'score': 4},
+        {'text': 'green', 'score': 6},
+        {'text': 'black', 'score': 7},
+        {'text': 'blue', 'score': 8}
+      ],
     },
     {
       'question': 'what\' your favorite animal',
-      'answer': ['dog', 'cat', 'rabbit', 'elephant'],
+      'answer': [
+        {'text': 'dog', 'score': 1},
+        {'text': 'cat', 'score': 3},
+        {'text': 'rabbit', 'score': 5},
+        {'text': 'elephant', 'score': 8}
+      ],
     },
     {
       'question': 'who\'s your favorite instructor',
-      'answer': ['max', 'max', 'max', 'max'],
+      'answer': [
+        {'text': 'max', 'score': 5},
+        {'text': 'max', 'score': 5},
+        {'text': 'max', 'score': 5},
+        {'text': 'max', 'score': 5}
+      ],
     }
   ];
 
-  void _answerQuestion() {
+  var _questionIndex = 0;
+  var _totalScore = 0;
+
+  void resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
+  }
+
+  void _answerQuestion(int score) {
+    _totalScore += score;
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
@@ -44,6 +68,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    print('hola desde el build' + _questionIndex.toString());
+
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
@@ -56,7 +82,7 @@ class _MyAppState extends State<MyApp> {
                     questionIndex: _questionIndex,
                     questions: _questions,
                   )
-                : Result(),
+                : Result(_totalScore, resetQuiz),
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.centerLeft,
